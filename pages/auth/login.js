@@ -2,9 +2,10 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Card from '../../components/base/card'
-import TextField from '../../components/text-field'
+import TextField from '../../components/base/text-field'
 import Divider from '@material-ui/core/Divider'
 import Button, { ButtonVariant } from '../../components/base/button'
+import InputGroup from '../../components/input-group'
 import { handleInputChange } from '../../utils/component-handler.ts'
 
 export default function Login () {
@@ -25,22 +26,25 @@ export default function Login () {
           <div className="w-80">
             <Card>
               <form method="POST">
-                <div className="mb-8 font-poppins font-bold text-xl text-gray-700">Sign In</div>
                 <div className="mb-3">
-                  <TextField
-                    required
-                    value={email}
-                    placeholder="Email"
-                    type="text"
-                    onChange={(event) => handleInputChange(event, setEmail, 255)}/>
+                  <InputGroup label="Email">
+                    <TextField
+                      required
+                      value={email}
+                      placeholder="Your email"
+                      type="text"
+                      onChange={(event) => handleInputChange(event, setEmail, 255)}/>
+                  </InputGroup>
                 </div>
                 <div className="mb-10">
-                  <TextField
-                    required
-                    value={password}
-                    placeholder="Password"
-                    type="password"
-                    onChange={(event) => handleInputChange(event, setPassword, 255)}/>
+                  <InputGroup label="Password">
+                    <TextField
+                      required
+                      value={password}
+                      placeholder="Your password"
+                      type="password"
+                      onChange={(event) => handleInputChange(event, setPassword, 255)}/>
+                  </InputGroup>
                 </div>
                 <div className="mb-2">
                   <Divider/>

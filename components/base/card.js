@@ -25,7 +25,7 @@ export default function Card (props) {
   const classes = useStyles()
 
   return (
-    <MuiCard className={classes.card} {...other}>
+    <MuiCard {...other} className={classes.card}>
       <MuiCardContent>
         { children }
       </MuiCardContent>

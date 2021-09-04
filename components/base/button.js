@@ -53,9 +53,9 @@ const Button = forwardRef((props, ref) => {
 
   return (
     <MuiButton
+      {...other}
       ref={ref}
-      className={variantClasses}
-      {...other}>
+      className={variantClasses}>
       {children}
     </MuiButton>
   )

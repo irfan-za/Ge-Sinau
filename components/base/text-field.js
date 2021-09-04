@@ -1,0 +1,35 @@
+import MuiTextField from '@material-ui/core/TextField'
+import { makeStyles } from '@material-ui/core'
+
+const useStyles = makeStyles({
+  textField: {
+    width: '100%',
+    padding: '0rem',
+    fontFamily: "'Poppins', sans-serif",
+    '& .MuiInputBase-root': {
+      borderRadius: '2rem'
+    },
+    '& .MuiInputBase-root:focus-within': {
+      borderColor: '#0591fa',
+      borderWidth: '2px'
+    },
+    '& .MuiInputBase-root:focus-within .MuiInputBase-input': {
+      padding: 'calc(0.8rem - 2px) calc(1.5rem - 2px)'
+    },
+    '& .MuiInputBase-input': {
+      padding: '0.8rem 1.5rem'
+    },
+    '& .MuiOutlinedInput-root:focus-within .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#0591fa',
+      borderWidth: '0'
+    }
+  }
+})
+
+export default function TextField ({ ...rest }) {
+  const classes = useStyles()
+
+  return (
+    <MuiTextField {...rest} className={classes.textField} variant='outlined'/>
+  )
+}
