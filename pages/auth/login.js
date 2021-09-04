@@ -26,6 +26,7 @@ export default function Login () {
           <div className="w-80">
             <Card>
               <form method="POST">
+
                 <div className="mb-3">
                   <InputGroup label="Email">
                     <TextField
@@ -52,12 +53,10 @@ export default function Login () {
                 <div className="mb-2">
                   <Button>Login</Button>
                 </div>
-                <Link href="/auth/register">
-                  <>
-                    <Button variant={ButtonVariant.secondary}>
-                      Sign Up
-                    </Button>
-                  </>
+                <Link passHref href="/auth/register">
+                  <Button variant={ButtonVariant.secondary}>
+                    Sign Up
+                  </Button>
                 </Link>
               </form>
             </Card>
