@@ -1,3 +1,5 @@
+@import url('./tailwind-base.css');
+
 html,
 body {
   padding: 0;
