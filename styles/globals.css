@@ -1,4 +1,6 @@
-@import url('./tailwind-base.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html,
 body {
@@ -6,11 +8,6 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
 }
 
 * {
