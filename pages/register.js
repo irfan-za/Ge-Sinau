@@ -12,7 +12,7 @@ import FlashAlert, {
   FlashAlertStatus
 } from '../components/flash-alert.tsx'
 import { handleInputChange } from '../utils/component-handler.ts'
-import styles from '../styles/auth/Login.module.css'
+import styles from '../styles/Login.module.css'
 
 export default function Register () {
   const [username, setUsername] = useState('')
@@ -124,7 +124,7 @@ export default function Register () {
                   <div className="mb-2">
                     <Button type="submit">Create Account</Button>
                   </div>
-                  <Link passHref href="/auth/login">
+                  <Link passHref href="/login">
                     <Button variant={ButtonVariant.secondary}>
                       Sign In
                     </Button>

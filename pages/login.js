@@ -1,31 +1,33 @@
-import { useState, useContext, useEffect, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import {useRouter} from "next/router"
+import { useRouter } from 'next/router'
 import Card from '../components/base/card'
 import TextField from '../components/base/text-field'
 import Divider from '@material-ui/core/Divider'
 import Button, { ButtonVariant } from '../components/base/button'
 import InputGroup from '../components/input-group'
 import { handleInputChange } from '../utils/component-handler.ts'
-import styles from '../styles/auth/Login.module.css'
-// user context
-import { UserContext } from '../components/UserContext'
+import styles from '../styles/Login.module.css'
 
+// useAuth hook
+import { useAuth } from '../auth/user-context'
 
 export default function Login () {
-  const [currentUser, setCurrentUser]=useContext(UserContext);
+  const { login, currentUser } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const buttonRef=useRef(null)
-  const router=useRouter()
+  const buttonRef = useRef(null)
+  const router = useRouter()
 
-  useEffect(() => {
-    if(currentUser){
-      router.push("/article")
+  /**
+   * Redirect to page if user session available
+   */
+  const redirectToPrivatePage = () => {
+    if (currentUser && router) {
+      router.push('/article')
     }
-  }, [currentUser])
-
+  }
 
   /**
    * Handle submit form event to perform login
@@ -33,14 +35,12 @@ export default function Login () {
    */
   const handleFormSubmit = (event) => {
     event.preventDefault()
-    console.log(buttonRef.current.textContent)
-    buttonRef.current.textContent="Loading...";
-      setCurrentUser({
-        email,password
-      })
-    buttonRef.current.textContent="Login";
-    
+    buttonRef.current.textContent = 'Loading...'
+    login(email, password)
+    buttonRef.current.textContent = 'Login'
   }
+
+  useEffect(redirectToPrivatePage, [currentUser, router])
 
   return (
     <>
