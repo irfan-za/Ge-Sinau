@@ -1,17 +1,31 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import Card from '../../components/base/card'
-import TextField from '../../components/base/text-field'
+import {useRouter} from "next/router"
+import Card from '../components/base/card'
+import TextField from '../components/base/text-field'
 import Divider from '@material-ui/core/Divider'
-import Button, { ButtonVariant } from '../../components/base/button'
-import InputGroup from '../../components/input-group'
-import { handleInputChange } from '../../utils/component-handler.ts'
-import styles from '../../styles/auth/Login.module.css'
+import Button, { ButtonVariant } from '../components/base/button'
+import InputGroup from '../components/input-group'
+import { handleInputChange } from '../utils/component-handler.ts'
+import styles from '../styles/auth/Login.module.css'
+// user context
+import { UserContext } from '../components/UserContext'
+
 
 export default function Login () {
+  const [currentUser, setCurrentUser]=useContext(UserContext);
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const buttonRef=useRef(null)
+  const router=useRouter()
+
+  useEffect(() => {
+    if(currentUser){
+      router.push("/article")
+    }
+  }, [currentUser])
+
 
   /**
    * Handle submit form event to perform login
@@ -19,6 +33,13 @@ export default function Login () {
    */
   const handleFormSubmit = (event) => {
     event.preventDefault()
+    console.log(buttonRef.current.textContent)
+    buttonRef.current.textContent="Loading...";
+      setCurrentUser({
+        email,password
+      })
+    buttonRef.current.textContent="Login";
+    
   }
 
   return (
@@ -61,9 +82,9 @@ export default function Login () {
                     <Divider/>
                   </div>
                   <div className="mb-2">
-                    <Button type="submit">Login</Button>
+                    <Button ref={buttonRef} type="submit">Login</Button>
                   </div>
-                  <Link passHref href="/auth/register">
+                  <Link passHref href="/register">
                     <Button variant={ButtonVariant.secondary}>
                       Sign Up
                     </Button>

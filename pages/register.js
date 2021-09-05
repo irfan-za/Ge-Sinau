@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import Card from '../../components/base/card'
-import TextField from '../../components/base/text-field'
+import Card from '../components/base/card'
+import TextField from '../components/base/text-field'
 import Divider from '@material-ui/core/Divider'
-import Button, { ButtonVariant } from '../../components/base/button'
-import InputGroup from '../../components/input-group'
+import Button, { ButtonVariant } from '../components/base/button'
+import InputGroup from '../components/input-group'
 import FlashAlert, {
   FlashAlertState,
   FlashAlertHandler,
   FlashAlertStatus
-} from '../../components/flash-alert.tsx'
-import { handleInputChange } from '../../utils/component-handler.ts'
-import styles from '../../styles/auth/Login.module.css'
+} from '../components/flash-alert.tsx'
+import { handleInputChange } from '../utils/component-handler.ts'
+import styles from '../styles/auth/Login.module.css'
 
 export default function Register () {
   const [username, setUsername] = useState('')

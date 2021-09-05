@@ -17,7 +17,7 @@ export default function Home () {
               <span className="text-green-500">Ge&apos;</span>
               <span className="text-blue-500">Sinau</span>
             </div>
-            <Link passHref href="/auth/login">
+            <Link passHref href="/login">
               <Button>
                 <h2>Login &rarr;</h2>
               </Button>
