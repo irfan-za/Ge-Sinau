@@ -15,6 +15,7 @@ import { handleInputChange } from '../../utils/component-handler.ts'
 import styles from '../../styles/auth/Login.module.css'
 
 export default function Register () {
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [validationPassword, setValidationPassword] = useState('')
@@ -69,7 +70,7 @@ export default function Register () {
       <div className="relative">
         <div className={`w-screen h-screen ${styles.bgLogin} absolute`}></div>
         <div className='flex flex-col items-center justify-center h-screen'>
-          <div className="text-4xl font-bold font-poppins mb-14">
+          <div className="text-4xl font-bold font-poppins mb-8">
             <span className="text-green-500">Ge&apos;</span>
             <span className="text-blue-500">Sinau</span>
           </div>
@@ -78,6 +79,16 @@ export default function Register () {
               <Card>
                 <form className="m-2" onSubmit={handleFormSubmit}>
                   <div className="mb-3 mt-2">
+                    <InputGroup label="Username">
+                      <TextField
+                        required
+                        value={username}
+                        placeholder="Your username"
+                        type="text"
+                        onChange={(event) => handleInputChange(event, setUsername, 255)}/>
+                    </InputGroup>
+                  </div>
+                  <div className="mb-3">
                     <InputGroup label="Email">
                       <TextField
                         required
