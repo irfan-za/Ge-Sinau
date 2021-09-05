@@ -6,25 +6,65 @@ import TextField from '../../components/base/text-field'
 import Divider from '@material-ui/core/Divider'
 import Button, { ButtonVariant } from '../../components/base/button'
 import InputGroup from '../../components/input-group'
+import FlashAlert, {
+  FlashAlertState,
+  FlashAlertHandler,
+  FlashAlertStatus
+} from '../../components/flash-alert.tsx'
 import { handleInputChange } from '../../utils/component-handler.ts'
 import styles from '../../styles/auth/Login.module.css'
 
-export default function Login () {
+export default function Register () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [validationPassword, setValidationPassword] = useState('')
+  const [flashAlertState, setflashAlertState] = useState(FlashAlertState)
 
   /**
-   * Handle submit form event to perform login
+   * Password matching validator
+   * @returns validator response
+   */
+  const validatePassword = () => {
+    let isMatch = false
+    let message = ''
+
+    if (password === validationPassword) {
+      isMatch = true
+      message = 'Your password is match !'
+    } else {
+      isMatch = false
+      message = "Your password isn't match !"
+    }
+
+    return {
+      isMatch,
+      message
+    }
+  }
+
+  /**
+   * Handle submit form event to create user account
    * @param {React.FormEventHandler<HTMLFormElement>} event
    */
   const handleFormSubmit = (event) => {
     event.preventDefault()
+    const passwordValidator = validatePassword()
+
+    if (passwordValidator.isMatch) {
+      // Do register here
+    } else {
+      FlashAlertHandler.open(
+        "Your password doesn't match !",
+        FlashAlertStatus.error,
+        setflashAlertState
+      )
+    }
   }
 
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Register</title>
       </Head>
       <div className="relative">
         <div className={`w-screen h-screen ${styles.bgLogin} absolute`}></div>
@@ -47,7 +87,7 @@ export default function Login () {
                         onChange={(event) => handleInputChange(event, setEmail, 255)}/>
                     </InputGroup>
                   </div>
-                  <div className="mb-10">
+                  <div className="mb-3">
                     <InputGroup label="Password">
                       <TextField
                         required
@@ -57,15 +97,25 @@ export default function Login () {
                         onChange={(event) => handleInputChange(event, setPassword, 255)}/>
                     </InputGroup>
                   </div>
+                  <div className="mb-10">
+                    <InputGroup label="Re-Enter Password">
+                      <TextField
+                        required
+                        value={validationPassword}
+                        placeholder="Type your password again"
+                        type="password"
+                        onChange={(event) => handleInputChange(event, setValidationPassword, 255)}/>
+                    </InputGroup>
+                  </div>
                   <div className="mb-2">
                     <Divider/>
                   </div>
                   <div className="mb-2">
-                    <Button type="submit">Login</Button>
+                    <Button type="submit">Create Account</Button>
                   </div>
-                  <Link passHref href="/auth/register">
+                  <Link passHref href="/auth/login">
                     <Button variant={ButtonVariant.secondary}>
-                      Sign Up
+                      Sign In
                     </Button>
                   </Link>
                 </form>
@@ -74,6 +124,12 @@ export default function Login () {
           </div>
         </div>
       </div>
+      <FlashAlert
+        open={flashAlertState.open}
+        status={flashAlertState.status}
+        message={flashAlertState.message}
+        onClose={() => { FlashAlertHandler.close(flashAlertState, setflashAlertState) }}
+        autoHideDuration={2000} />
     </>
   )
 }

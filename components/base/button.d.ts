@@ -1,6 +1,9 @@
 import { HTMLProps } from 'react'
 import MuiButton from '@material-ui/core/Button'
 
+/**
+ * Proptypes of Button component
+ */
 interface ButtonProps extends HTMLProps<typeof MuiButton> {
     variant: string
 }

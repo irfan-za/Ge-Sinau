@@ -9,7 +9,7 @@ InputGroup.propTypes = {
 function InputGroup ({ label, children, className }) {
   return (
     <div className={`mb-6 ${(className) || ''}`}>
-      <div className="mb-2 font-poppins text-lg font-medium text-gray-800">{label}</div>
+      <div className="mb-2 font-roboto text-lg font-medium text-gray-800">{label}</div>
       { children }
     </div>
   )

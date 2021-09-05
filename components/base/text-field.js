@@ -14,10 +14,10 @@ const useStyles = makeStyles({
       borderWidth: '2px'
     },
     '& .MuiInputBase-root:focus-within .MuiInputBase-input': {
-      padding: 'calc(0.8rem - 2px) calc(1.5rem - 2px)'
+      padding: 'calc(0.6rem - 2px) calc(1.25rem - 2px)'
     },
     '& .MuiInputBase-input': {
-      padding: '0.8rem 1.5rem'
+      padding: '0.6rem 1.25rem'
     },
     '& .MuiOutlinedInput-root:focus-within .MuiOutlinedInput-notchedOutline': {
       borderColor: '#0591fa',
