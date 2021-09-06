@@ -11,7 +11,7 @@ import { handleInputChange } from '../utils/component-handler.ts'
 import styles from '../styles/Login.module.css'
 
 // useAuth hook
-import { useAuth } from '../auth/user-context'
+import { useAuth } from '../auth/auth-provider'
 
 export default function Login () {
   const { login, currentUser } = useAuth()

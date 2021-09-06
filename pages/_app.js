@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import UserProvider from '../auth/user-context'
+import AuthProvider from '../auth/auth-provider'
 import '../styles/globals.css'
 
 MyApp.propTypes = {
@@ -9,9 +9,9 @@ MyApp.propTypes = {
 
 function MyApp ({ Component, pageProps }) {
   return (
-    <UserProvider>
+    <AuthProvider>
       <Component {...pageProps} />
-    </UserProvider>
+    </AuthProvider>
   )
 }
 

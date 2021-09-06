@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react'
 import PropTypes from 'prop-types'
 
-const UserContext = createContext()
+const AuthContext = createContext()
 
 /**
  * Auth controller
@@ -31,19 +31,19 @@ function useProvideAuth () {
  * @returns
  */
 export function useAuth () {
-  return useContext(UserContext)
+  return useContext(AuthContext)
 }
 
-export default function UserProvider ({ children }) {
+export default function AuthProvider ({ children }) {
   const auth = useProvideAuth()
 
   return (
-    <UserContext.Provider value={auth}>
+    <AuthContext.Provider value={auth}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   )
 }
 
-UserProvider.propTypes = {
+AuthProvider.propTypes = {
   children: PropTypes.node
 }

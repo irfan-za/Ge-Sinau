@@ -15,6 +15,7 @@ import { handleInputChange } from '../utils/component-handler.ts'
 import styles from '../styles/Login.module.css'
 
 export default function Register () {
+  const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -68,67 +69,85 @@ export default function Register () {
         <title>Register</title>
       </Head>
       <div className="relative">
-        <div className={`w-screen h-screen ${styles.bgLogin} absolute`}></div>
-        <div className='flex flex-col items-center justify-center h-screen'>
+        <div className={`w-screen h-screen fixed ${styles.bgLogin}`}></div>
+        <div className='flex flex-col items-center justify-center pt-10 pb-10'>
           <div className="text-4xl font-bold font-poppins mb-8">
             <span className="text-green-500">Ge&apos;</span>
             <span className="text-blue-500">Sinau</span>
           </div>
           <div className="col-span-2 flex justify-center items-center">
-            <div className="w-80 md:w-96">
+            <div>
               <Card>
-                <form className="m-2" onSubmit={handleFormSubmit}>
-                  <div className="mb-3 mt-2">
-                    <InputGroup label="Username">
-                      <TextField
-                        required
-                        value={username}
-                        placeholder="Your username"
-                        type="text"
-                        onChange={(event) => handleInputChange(event, setUsername, 255)}/>
-                    </InputGroup>
+                <form className="p-4" onSubmit={handleFormSubmit}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
+                    <div className="col-span-1">
+                      <div className="mb-3">
+                        <InputGroup label="Full Name">
+                          <TextField
+                            required
+                            value={name}
+                            placeholder="Your name"
+                            type="text"
+                            onChange={(event) => handleInputChange(event, setName, 255)}/>
+                        </InputGroup>
+                      </div>
+                      <div className="mb-3">
+                        <InputGroup label="Username">
+                          <TextField
+                            required
+                            value={username}
+                            placeholder="Your username"
+                            type="text"
+                            onChange={(event) => handleInputChange(event, setUsername, 255)}/>
+                        </InputGroup>
+                      </div>
+                    </div>
+                    <div className="col-span-1">
+                      <div className="mb-3">
+                        <InputGroup label="Email">
+                          <TextField
+                            required
+                            value={email}
+                            placeholder="Your email"
+                            type="email"
+                            onChange={(event) => handleInputChange(event, setEmail, 255)}/>
+                        </InputGroup>
+                      </div>
+                      <div className="mb-3">
+                        <InputGroup label="Password">
+                          <TextField
+                            required
+                            value={password}
+                            placeholder="Your password"
+                            type="password"
+                            onChange={(event) => handleInputChange(event, setPassword, 255)}/>
+                        </InputGroup>
+                      </div>
+                      <div className="mb-10">
+                        <InputGroup label="Re-Enter Password">
+                          <TextField
+                            required
+                            value={validationPassword}
+                            placeholder="Type your password again"
+                            type="password"
+                            onChange={(event) => handleInputChange(event, setValidationPassword, 255)}/>
+                        </InputGroup>
+                      </div>
+                    </div>
                   </div>
-                  <div className="mb-3">
-                    <InputGroup label="Email">
-                      <TextField
-                        required
-                        value={email}
-                        placeholder="Your email"
-                        type="email"
-                        onChange={(event) => handleInputChange(event, setEmail, 255)}/>
-                    </InputGroup>
+                  <div>
+                    <div className="mb-2">
+                      <Divider/>
+                    </div>
+                    <div className="mb-2">
+                      <Button type="submit">Create Account</Button>
+                    </div>
+                    <Link passHref href="/login">
+                      <Button variant={ButtonVariant.secondary}>
+                        Sign In
+                      </Button>
+                    </Link>
                   </div>
-                  <div className="mb-3">
-                    <InputGroup label="Password">
-                      <TextField
-                        required
-                        value={password}
-                        placeholder="Your password"
-                        type="password"
-                        onChange={(event) => handleInputChange(event, setPassword, 255)}/>
-                    </InputGroup>
-                  </div>
-                  <div className="mb-10">
-                    <InputGroup label="Re-Enter Password">
-                      <TextField
-                        required
-                        value={validationPassword}
-                        placeholder="Type your password again"
-                        type="password"
-                        onChange={(event) => handleInputChange(event, setValidationPassword, 255)}/>
-                    </InputGroup>
-                  </div>
-                  <div className="mb-2">
-                    <Divider/>
-                  </div>
-                  <div className="mb-2">
-                    <Button type="submit">Create Account</Button>
-                  </div>
-                  <Link passHref href="/login">
-                    <Button variant={ButtonVariant.secondary}>
-                      Sign In
-                    </Button>
-                  </Link>
                 </form>
               </Card>
             </div>
