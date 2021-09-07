@@ -21,6 +21,7 @@ function useProvideAuth () {
   const login = async (email, password) => {
     const response = await AuthData.login(email, password)
     const isSuccess = false
+    const message = response.message
 
     if (response.status === 'success') {
       const accessToken = response.data.accessToken
@@ -28,7 +29,10 @@ function useProvideAuth () {
       setSession({ accessToken, refreshToken })
     }
 
-    return isSuccess
+    return {
+      isSuccess,
+      message
+    }
   }
 
   const logout = () => {

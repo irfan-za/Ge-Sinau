@@ -40,9 +40,11 @@ export default function Login () {
   const performLogin = async () => {
     try {
       FlashAlertHandler.open('Loading ...', FlashAlertStatus.info, setflashAlertState)
-      const isSuccess = await login(username, password)
+      const { isSuccess, message } = await login(username, password)
       if (isSuccess) {
         redirectToPrivatePage()
+      } else {
+        FlashAlertHandler.open(message, FlashAlertStatus.info, setflashAlertState)
       }
     } catch (error) {
       let message = 'Something went wrong !'
