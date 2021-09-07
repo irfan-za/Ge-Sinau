@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -7,6 +7,11 @@ import TextField from '../components/base/text-field'
 import Divider from '@material-ui/core/Divider'
 import Button, { ButtonVariant } from '../components/base/button'
 import InputGroup from '../components/input-group'
+import FlashAlert, {
+  FlashAlertState,
+  FlashAlertHandler,
+  FlashAlertStatus
+} from '../components/flash-alert.tsx'
 import { handleInputChange } from '../utils/component-handler.ts'
 import styles from '../styles/Login.module.css'
 
@@ -14,18 +19,41 @@ import styles from '../styles/Login.module.css'
 import { useAuth } from '../auth/auth-provider'
 
 export default function Login () {
-  const { login, currentUser } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const buttonRef = useRef(null)
   const router = useRouter()
+  const { login, session } = useAuth()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [flashAlertState, setflashAlertState] = useState(FlashAlertState)
 
   /**
    * Redirect to page if user session available
    */
   const redirectToPrivatePage = () => {
-    if (currentUser && router) {
+    if (session && router) {
       router.push('/article')
+    }
+  }
+
+  /**
+   * Do user login
+   */
+  const performLogin = async () => {
+    try {
+      FlashAlertHandler.open('Loading ...', FlashAlertStatus.info, setflashAlertState)
+      const isSuccess = await login(username, password)
+      if (isSuccess) {
+        redirectToPrivatePage()
+      }
+    } catch (error) {
+      let message = 'Something went wrong !'
+
+      if (error.name === 'NetworkError') {
+        message = 'Network error !'
+      } else if (error.name === 'InternalServerError') {
+        message = 'Internal server error !'
+      }
+
+      FlashAlertHandler.open(message, FlashAlertStatus.error, setflashAlertState)
     }
   }
 
@@ -35,12 +63,10 @@ export default function Login () {
    */
   const handleFormSubmit = (event) => {
     event.preventDefault()
-    buttonRef.current.textContent = 'Loading...'
-    login(email, password)
-    buttonRef.current.textContent = 'Login'
+    performLogin()
   }
 
-  useEffect(redirectToPrivatePage, [currentUser, router])
+  useEffect(redirectToPrivatePage, [session, router])
 
   return (
     <>
@@ -59,13 +85,13 @@ export default function Login () {
               <Card>
                 <form className="m-2" onSubmit={handleFormSubmit}>
                   <div className="mb-3 mt-2">
-                    <InputGroup label="Email">
+                    <InputGroup label="Username">
                       <TextField
                         required
-                        value={email}
-                        placeholder="Your email"
-                        type="email"
-                        onChange={(event) => handleInputChange(event, setEmail, 255)}/>
+                        value={username}
+                        placeholder="Your username"
+                        type="text"
+                        onChange={(event) => handleInputChange(event, setUsername, 255)}/>
                     </InputGroup>
                   </div>
                   <div className="mb-10">
@@ -82,7 +108,7 @@ export default function Login () {
                     <Divider/>
                   </div>
                   <div className="mb-2">
-                    <Button ref={buttonRef} type="submit">Login</Button>
+                    <Button type="submit">Login</Button>
                   </div>
                   <Link passHref href="/register">
                     <Button variant={ButtonVariant.secondary}>
@@ -95,6 +121,12 @@ export default function Login () {
           </div>
         </div>
       </div>
+      <FlashAlert
+        open={flashAlertState.open}
+        status={flashAlertState.status}
+        message={flashAlertState.message}
+        onClose={() => { FlashAlertHandler.close(flashAlertState, setflashAlertState) }}
+        autoHideDuration={2000} />
     </>
   )
 }

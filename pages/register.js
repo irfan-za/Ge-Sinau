@@ -11,6 +11,7 @@ import FlashAlert, {
   FlashAlertHandler,
   FlashAlertStatus
 } from '../components/flash-alert.tsx'
+import UserData from '../api/user-data'
 import { handleInputChange } from '../utils/component-handler.ts'
 import styles from '../styles/Login.module.css'
 
@@ -21,6 +22,17 @@ export default function Register () {
   const [password, setPassword] = useState('')
   const [validationPassword, setValidationPassword] = useState('')
   const [flashAlertState, setflashAlertState] = useState(FlashAlertState)
+
+  /**
+   * Clear application form
+   */
+  const clearForm = () => {
+    setName('')
+    setUsername('')
+    setEmail('')
+    setPassword('')
+    setValidationPassword('')
+  }
 
   /**
    * Password matching validator
@@ -45,6 +57,34 @@ export default function Register () {
   }
 
   /**
+   * Do new user registration
+   * @async
+   */
+  const performRegister = async () => {
+    try {
+      FlashAlertHandler.open('Loading ...', FlashAlertStatus.info, setflashAlertState)
+      const response = await UserData.register({ fullname: name, username, email, password })
+      if (response.status === 'success') {
+        clearForm()
+        FlashAlertHandler.open('Success to register account', FlashAlertStatus.success, setflashAlertState)
+      } else {
+        const message = response.message || 'Failed to create account'
+        FlashAlertHandler.open(message, FlashAlertStatus.error, setflashAlertState)
+      }
+    } catch (error) {
+      let message = 'Something went wrong !'
+
+      if (error.name === 'NetworkError') {
+        message = 'Network error !'
+      } else if (error.name === 'InternalServerError') {
+        message = 'Internal server error !'
+      }
+
+      FlashAlertHandler.open(message, FlashAlertStatus.error, setflashAlertState)
+    }
+  }
+
+  /**
    * Handle submit form event to create user account
    * @param {React.FormEventHandler<HTMLFormElement>} event
    */
@@ -53,7 +93,7 @@ export default function Register () {
     const passwordValidator = validatePassword()
 
     if (passwordValidator.isMatch) {
-      // Do register here
+      performRegister()
     } else {
       FlashAlertHandler.open(
         "Your password doesn't match !",

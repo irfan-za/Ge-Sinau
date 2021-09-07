@@ -33,6 +33,9 @@ class BookData {
   static async add ({ title, tags, body, video }) {
     const fetchPromise = fetch(BookEndpoint.addBook.url, {
       method: BookEndpoint.addBook.method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ title, tags, body, video })
     })
     return apiResponseBuilder(fetchPromise)
@@ -51,6 +54,9 @@ class BookData {
   static async update ({ id, title, tags, body, video }) {
     const fetchPromise = fetch(BookEndpoint.updateBook.url(id), {
       method: BookEndpoint.updateBook.method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ id, title, tags, body, video })
     })
     return apiResponseBuilder(fetchPromise)

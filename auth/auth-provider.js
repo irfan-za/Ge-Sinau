@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import PropTypes from 'prop-types'
+import AuthData from '../api/auth-data'
 
 const AuthContext = createContext()
 
@@ -8,19 +9,34 @@ const AuthContext = createContext()
  * @returns
  */
 function useProvideAuth () {
-  const [currentUser, setCurrentUser] = useState(null)
+  const [session, setSession] = useState(null)
 
-  const login = (email, password) => {
-    setCurrentUser({ email, password })
-    return currentUser
+  /**
+   * Set current user state after login
+   * Warning: Please use try catch for this function
+   * @param {string} email
+   * @param {string} password
+   * @returns
+   */
+  const login = async (email, password) => {
+    const response = await AuthData.login(email, password)
+    const isSuccess = false
+
+    if (response.status === 'success') {
+      const accessToken = response.data.accessToken
+      const refreshToken = response.data.refreshToken
+      setSession({ accessToken, refreshToken })
+    }
+
+    return isSuccess
   }
 
   const logout = () => {
-    setCurrentUser(null)
+    setSession(null)
   }
 
   return {
-    currentUser,
+    session,
     login,
     logout
   }
