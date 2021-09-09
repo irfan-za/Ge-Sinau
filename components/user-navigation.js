@@ -50,7 +50,7 @@ const useStyles = makeStyles({
   },
   drawerPapper: {
     width: drawerWidth,
-    background: 'rgba(59, 130, 246, 1)'
+    background: '#0591fa'
   },
   drawerButton: {
     marginRight: '1rem',
@@ -87,11 +87,11 @@ const useStyles = makeStyles({
   circleButton: {
     width: '40px',
     height: '40px',
-    backgroundColor: 'rgba(59, 130, 246, 1)',
+    backgroundColor: '#0591fa',
     color: 'white',
     filter: 'drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.25))',
     '&:hover': {
-      backgroundColor: 'rgba(59, 130, 246, 1)'
+      backgroundColor: '#0591fa'
     }
   },
   content: {
@@ -140,7 +140,7 @@ function UserNavigation ({ children }) {
                 {(popupState) => (
                   <>
                     <div className="flex items-center cursor-pointer" style={{ maxWidth: '250px' }} {...bindTrigger(popupState)}>
-                      <Avatar className={classes.userAvatar} style={{ backgroundColor: 'rgba(59, 130, 246, 1)' }}/>
+                      <Avatar className={classes.userAvatar} style={{ backgroundColor: '#0591fa' }}/>
                       <ProcessComponentsExpression
                         isCanRender={width > 768}>
                           <span className="ml-2 overflow-hidden overflow-ellipsis whitespace-nowrap" style={{ color: '#6B6363' }}>
