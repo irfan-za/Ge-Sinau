@@ -30,7 +30,7 @@ export default function Login () {
    */
   const redirectToPrivatePage = () => {
     if (session && router) {
-      router.push('/article')
+      router.push('/books')
     }
   }
 

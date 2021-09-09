@@ -3,8 +3,8 @@ import AuthProvider from '../auth/auth-provider'
 import '../styles/globals.css'
 
 MyApp.propTypes = {
-  Component: PropTypes.any,
-  pageProps: PropTypes.any
+  Component: PropTypes.elementType.isRequired,
+  pageProps: PropTypes.object.isRequired
 }
 
 function MyApp ({ Component, pageProps }) {
