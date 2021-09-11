@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import Image from "next/image"
+import Image from 'next/image'
 import Button from '../components/base/button'
-import Card from "../components/base/card"
+import Card from '../components/base/card'
 
 export default function Home () {
   return (
@@ -25,35 +25,32 @@ export default function Home () {
         <div className="mt-24 grid grid-cols-3 gap-16">
           <Card>
             <div>
-
-                <Image 
-                  src="/images/imm.png"
-                  layout="fill"
-                  objectFit="cover"
-                  quality={100}
-                  />
+              <Image
+                src="/images/imm.png"
+                layout="fill"
+                objectFit="cover"
+                quality={100}
+                />
             </div>
           </Card>
           <Card>
             <div>
-
-                <Image 
-                  src="/images/imm.png"
-                  layout="fill"
-                  objectFit="cover"
-                  quality={100}
-                  />
+              <Image
+                src="/images/imm.png"
+                layout="fill"
+                objectFit="cover"
+                quality={100}
+                />
             </div>
           </Card>
           <Card>
             <div>
-
-                <Image 
-                  src="/images/imm.png"
-                  layout="fill"
-                  objectFit="cover"
-                  quality={100}
-                  />
+              <Image
+                src="/images/imm.png"
+                layout="fill"
+                objectFit="cover"
+                quality={100}
+                />
             </div>
           </Card>
         </div>
