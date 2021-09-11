@@ -22,18 +22,39 @@ class BookData {
   }
 
   /**
+   * Upload book video
+   * @param {File} file
+   * @param {string} accessToken
+   * @returns
+   */
+  static async uploadVideo (file, accessToken) {
+    const formData = new FormData()
+    formData.append('data', file)
+    const fetchPromise = fetch(BookEndpoint.uploadVideo.url, {
+      method: BookEndpoint.uploadVideo.method,
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: formData
+    })
+    return apiResponseBuilder(fetchPromise)
+  }
+
+  /**
    * Add book to api
    * @param {Object} book
    * @param {string} book.title
    * @param {Array<string>} book.tags
    * @param {string} book.body
    * @param {string} book.video
+   * @param {string} book.accessToken
    * @returns {Promise}
    */
-  static async add ({ title, tags, body, video }) {
+  static async add ({ title, tags, body, video, accessToken }) {
     const fetchPromise = fetch(BookEndpoint.addBook.url, {
       method: BookEndpoint.addBook.method,
       headers: {
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ title, tags, body, video })

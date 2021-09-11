@@ -1,13 +1,12 @@
-import { HTMLProps } from 'react'
-import TextareaAutosize from '@material-ui/core/TextareaAutosize'
+import { TextareaAutosizeProps } from '@material-ui/core/TextareaAutosize'
 
 /**
- * Proptypes of Card component
+ * Proptypes of TextArea component
  */
-interface TextAreaProps extends HTMLProps<typeof TextareaAutosize> {}
+interface TextAreaProps extends TextareaAutosizeProps {}
 
 /**
- * JSX Card component
+ * JSX TextArea component
  * @param props - component props
  */
 export default function TextArea (props: TextAreaProps)

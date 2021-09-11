@@ -138,7 +138,7 @@ export default function Register () {
                             value={username}
                             placeholder="Your username"
                             type="text"
-                            onChange={(event) => handleInputChange(event, setUsername, 255)}/>
+                            onChange={(event) => handleInputChange(event, setUsername, 20)}/>
                         </InputGroup>
                       </div>
                     </div>
