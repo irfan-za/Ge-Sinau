@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import AuthData from '../api/auth-data'
+import { setCookie, getCookie, deleteCookie } from '../utils/browser-cookie.ts'
 
 const AuthContext = createContext()
 
@@ -12,8 +13,37 @@ function useProvideAuth () {
   const [session, setSession] = useState(null)
 
   /**
+   * Set session cookie to browser
+   * @param {string} accessToken
+   * @param {string} refreshToken
+   */
+  const setSessionCookie = (accessToken, refreshToken) => {
+    setCookie('accessToken', accessToken, 7)
+    setCookie('refreshToken', refreshToken, 7)
+  }
+
+  /**
+   * Get login session cookie
+   * @returns
+   */
+  const getSessionCookie = () => {
+    return {
+      accessToken: getCookie('accessToken'),
+      refreshToken: getCookie('refreshToken')
+    }
+  }
+
+  /**
+   * Remove cookie session from browser
+   */
+  const clearSessionCookie = () => {
+    deleteCookie('accessToken')
+    deleteCookie('refreshToken')
+  }
+
+  /**
    * Set current user state after login
-   * Warning: Please use try catch for this function
+   * WARNING: !!! PLEASE USE TRY CATCH TO USE THIS FUNCTION !!!
    * @param {string} email
    * @param {string} password
    * @returns
@@ -26,6 +56,7 @@ function useProvideAuth () {
     if (response.status === 'success') {
       const accessToken = response.data.accessToken
       const refreshToken = response.data.refreshToken
+      setSessionCookie(accessToken, refreshToken)
       setSession({ accessToken, refreshToken })
     }
 
@@ -35,9 +66,21 @@ function useProvideAuth () {
     }
   }
 
+  /**
+   * Set session to null
+   */
   const logout = () => {
     setSession(null)
+    clearSessionCookie()
   }
+
+  // Set saved session when first render
+  useEffect(() => {
+    const savedSession = getSessionCookie()
+    if (savedSession.refreshToken && savedSession.accessToken) {
+      setSession(savedSession)
+    }
+  }, [])
 
   return {
     session,

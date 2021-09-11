@@ -7,7 +7,9 @@ export default class MyDocument extends Document {
   render () {
     return (
       <Html lang="en">
-        <Head></Head>
+        <Head>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        </Head>
         <body>
           <Main />
           <NextScript />
