@@ -11,6 +11,41 @@ const AuthContext = createContext()
  */
 function useProvideAuth () {
   const [session, setSession] = useState(null)
+  const [sessionIntervalId, setSessionIntervalId] = useState(null)
+
+  /**
+   * Perform update access token using auth data
+   */
+  const performUpdateAccessToken = async () => {
+    try {
+      if (session) {
+        const response = await AuthData.updateAccessToken(session.refreshToken)
+        const newSession = { ...session, accessToken: response.data.accessToken }
+        setSessionCookie(newSession.accessToken, newSession.refreshToken)
+        setSession(newSession)
+      }
+    } catch (error) {
+      logout()
+    }
+  }
+
+  /**
+   * Set new session interval id
+   */
+  const setNewSessionIntervalId = () => {
+    // Update session access token every 15 minutes
+    const interval = setInterval(performUpdateAccessToken, (15 * 60 * 1000))
+    setSessionIntervalId(interval)
+  }
+
+  /**
+   * Clear session interval id
+   */
+  const clearUpdateSessionInterval = () => {
+    if (sessionIntervalId) {
+      clearInterval(sessionIntervalId)
+    }
+  }
 
   /**
    * Set session cookie to browser
@@ -72,15 +107,32 @@ function useProvideAuth () {
   const logout = () => {
     setSession(null)
     clearSessionCookie()
+    clearUpdateSessionInterval()
   }
 
-  // Set saved session when first render
-  useEffect(() => {
+  /**
+   * Restore session from cookie
+   */
+  const restoreSession = () => {
     const savedSession = getSessionCookie()
     if (savedSession.refreshToken && savedSession.accessToken) {
       setSession(savedSession)
     }
-  }, [])
+  }
+
+  // Restore saved session when first render
+  useEffect(restoreSession, [])
+
+  // Update session interval id when session changed
+  useEffect(() => {
+    if (session) {
+      if (sessionIntervalId) {
+        clearUpdateSessionInterval()
+      }
+
+      setNewSessionIntervalId()
+    }
+  }, [session])
 
   return {
     session,

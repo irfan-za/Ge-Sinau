@@ -1,13 +1,13 @@
-import { HTMLProps } from 'react'
-import MuiTextField from '@material-ui/core/TextField'
+/* eslint-disable no-undef */
+import { TextFieldProps as MuiTextFieldProps } from '@material-ui/core/TextField'
 
 /**
  * Proptypes of TextField component
  */
-interface TextFieldProps extends HTMLProps<typeof MuiTextField> {}
+export type TextFieldProps = MuiTextFieldProps
 
 /**
  * JSX TextField component
  * @param props - component props
  */
-export default function TextField (props: TextFieldProps)
+export default function TextField (props: TextFieldProps): JSX.Element

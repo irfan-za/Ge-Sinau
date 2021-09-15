@@ -1,12 +1,9 @@
-import { HTMLProps } from 'react'
-import MuiCard from '@material-ui/core/Card'
+import { CardProps as MuiCardProps } from '@material-ui/core/Card'
 
 /**
  * Proptypes of Card component
  */
-interface CardProps extends HTMLProps<typeof MuiCard> {
-    className: string
-}
+export type CardProps = MuiCardProps
 
 /**
  * JSX Card component

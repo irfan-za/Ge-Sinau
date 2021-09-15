@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import AuthProvider from '../auth/auth-provider'
+import { PaginationProvider } from '../pagination-context/pagination-context'
 import '../styles/globals.css'
 
 MyApp.propTypes = {
@@ -10,7 +11,9 @@ MyApp.propTypes = {
 function MyApp ({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <Component {...pageProps} />
+      <PaginationProvider>
+        <Component {...pageProps} />
+      </PaginationProvider>
     </AuthProvider>
   )
 }

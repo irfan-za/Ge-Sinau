@@ -8,6 +8,10 @@ const AuthEndpoint = {
   login: {
     method: 'POST',
     url: `${ApiBaseURL.origin}/auths`
+  },
+  updateAccessToken: {
+    method: 'PUT',
+    url: `${ApiBaseURL.origin}/auths`
   }
 }
 

@@ -1,20 +1,10 @@
-import { HTMLProps } from 'react'
-import MuiButton from '@material-ui/core/Button'
+import { ButtonProps as MuiButtonProps } from '@material-ui/core/Button'
 
 /**
- * Proptypes of Button component
+ * Merge with MuiButton props and replace variant type attributes
  */
-interface ButtonProps extends HTMLProps<typeof MuiButton> {
-    variant: string
-}
-
-/**
- * ButtonVariant namespace types
- * @namespace
- */
-export type ButtonVariant = {
-    primary: string
-    secondary: string
+interface ButtonProps extends MuiButtonProps {
+    variant: 'primary' | 'secondary'
 }
 
 /** JSX Button Component props definition */
