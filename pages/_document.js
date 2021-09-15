@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-document-import-in-page */
 /* eslint-disable react/display-name */
 import { Children } from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
