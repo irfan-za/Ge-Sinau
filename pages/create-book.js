@@ -1,17 +1,14 @@
 import { useState, useRef } from 'react'
 import TextField from '../components/base/text-field'
 import Divider from '@material-ui/core/Divider'
-import Button, { ButtonVariant } from '../components/base/button'
+import Button from '../components/base/button'
 import InputGroup from '../components/input-group'
-import TextareaAutosize from "../components/base/text-area"
+import TextareaAutosize from '../components/base/text-area'
 import { handleInputChange } from '../utils/component-handler.ts'
 
-
-
-
-export default function CreateBook(){
+export default function CreateBook () {
   const buttonRef = useRef(null)
-  const tagContainer =useRef(null)
+  const tagContainer = useRef(null)
   const [title, setTitle] = useState('')
   const [tag, setTag] = useState('')
   const [description, setDescription] = useState('')
@@ -21,11 +18,12 @@ export default function CreateBook(){
     event.preventDefault()
     console.table(title, tag, description)
   }
-  
-  const tagHandler=()=>{
-    return tagContainer.current.innerHtml=<button className="border border-blue-600 bg-blue-100 text-blue-600">{tag}</button>
+
+  const tagHandler = () => {
+    tagContainer.current.innerHtml = '<button class="border border-blue-600 bg-blue-100 text-blue-600">{tag}</button>'
+    return tagContainer
   }
-  return(
+  return (
     <div className="container mx-auto">
       <h1 className="text-center text-3xl text-blue-500 font-bold mt-3">Post New Book</h1>
       <div className="w-3/5 mx-auto">
@@ -56,10 +54,10 @@ export default function CreateBook(){
           </div>
           <div className="mb-10">
             <InputGroup label="Deskripsi">
-            <TextareaAutosize 
+            <TextareaAutosize
               required
-              aria-label="minimum height" 
-              minRows={3} 
+              aria-label="minimum height"
+              minRows={3}
               value={description}
               onChange={(event) => handleInputChange(event, setDescription, 255)}/>
             </InputGroup>

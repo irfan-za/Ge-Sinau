@@ -1,33 +1,31 @@
-import  Link  from "next/link"
+import Link from 'next/link'
 import { useAuth } from '../auth/auth-provider'
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
+export default function Bookshelves () {
+  const { session } = useAuth()
+  const [bookShelves, setBookShelves] = useState(null)
 
-
-export default function Bookshelves(){
-  const { login, session } = useAuth();
-  const [bookShelves, setBookShelves]=useState(null)
-
-  useEffect(async() => {
-    if(session){
-       await fetch("http://localhost:2525/bookshelves", {
+  useEffect(async () => {
+    if (session) {
+      await fetch('http://localhost:2525/bookshelves', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json'
-        },
+        }
       })
-      .then(response => response.json())
-      .then(data => setBookShelves(data.data.bookshelves))
-      .catch(err=>alert(err.message))
+        .then(response => response.json())
+        .then(data => setBookShelves(data.data.bookshelves))
+        .catch(err => alert(err.message))
     }
   }, [session])
 
-  return(
+  return (
     <div className="container mx-auto mt-5 px-3 md:px-0">
       <h1 className="text-center text-5xl font-bold mb-8">Daftar Buku</h1>
       <div className="bg-gray-100 p-6 rounded-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-large gap-10">
-        {bookShelves && bookShelves.map((bookshelve)=>
+        {bookShelves && bookShelves.map((bookshelve) =>
         <Link href="/" key={bookshelve.id}>
           <a target="_blank">
             <div className="bg-blue-200 rounded-lg p-3">

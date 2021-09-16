@@ -1,27 +1,25 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import Rating from "../../components/rating";
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import Rating from '../../components/rating'
 
-
-export default function BookDetail(){
-  const [book, setBook] = useState(null);
+export default function BookDetail () {
+  const [book, setBook] = useState(null)
   const [rating, setRating] = useState(null)
   const [comments, setComments] = useState(null)
-  const router=useRouter();
-  const bookId=router.query.bookid;
+  const router = useRouter()
+  const bookId = router.query.bookid
 
-
-  useEffect(async()=>{
-    const fetchBookDetail= await fetch("http://localhost:2525/books/" + bookId);
-    const bookDetail= await fetchBookDetail.json();
+  useEffect(async () => {
+    const fetchBookDetail = await fetch('http://localhost:2525/books/' + bookId)
+    const bookDetail = await fetchBookDetail.json()
     setBook(bookDetail.data)
 
-    const fetchRatings = await fetch("http://localhost:2525/votes?content=" + bookId)
-    const rating = await fetchRatings.json();
-    setRating(rating);
+    const fetchRatings = await fetch('http://localhost:2525/votes?content=' + bookId)
+    const rating = await fetchRatings.json()
+    setRating(rating)
 
-    const fetchComments = await fetch("http://localhost:2525/books/" + bookId + "/comments")
-    const comments = await fetchComments.json();
+    const fetchComments = await fetch('http://localhost:2525/books/' + bookId + '/comments')
+    const comments = await fetchComments.json()
     setComments(comments.data.comments)
   }, [bookId])
 
@@ -37,9 +35,9 @@ export default function BookDetail(){
       <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 justify-between items-center">
         <div>
           <div className="space-x-2 space-y-2">
-            {book.book.tags.map(tag=>
+            {book.book.tags.map(tag =>
             <p key={tag} className="px-1 lg:px-2 pb-0.5 text-sm lg:text-base bg-blue-200 text-gray-800 inline-block rounded font-medium">{tag}</p>
-              )}
+            )}
           </div>
           <p className="text-sm md:text-base text-gray-900 font-medium mt-2">{book.book.username}</p>
         </div>
@@ -58,7 +56,7 @@ export default function BookDetail(){
         </div>
         <div className="w-full mb-20 mt-12">
           <div className="lg:w-4/5 space-y-4">
-            {comments && comments.map(comment=>
+            {comments && comments.map(comment =>
             <div key={comment.id} className="p-4 bg-gray-100 rounded shadow-md">
               <div className="flex justify-between items-center">
                 <p className="md:text-lg text-gray-900 font-medium">{comment.username}</p>
@@ -76,7 +74,6 @@ export default function BookDetail(){
   )
 }
 
-
 // export async function getServerSideProps() {
 //   const res = await fetch("http://localhost:2525/books")
 //   const books= await res.json();
@@ -85,4 +82,4 @@ export default function BookDetail(){
 //       books
 //     }
 //   }
-// }  
+// }
