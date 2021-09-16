@@ -205,7 +205,7 @@ function UserNavigation ({ children }) {
                 </span>
               </div>
 
-              <Link passHref href="#">
+              <Link passHref href="/user/books">
                 <ListItem button>
                   <ListItemIcon className={classes.listItemIcon}>
                     <Icon>book</Icon>

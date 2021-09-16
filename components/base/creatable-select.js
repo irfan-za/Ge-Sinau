@@ -33,8 +33,14 @@ const useStyles = makeStyles({
 
 function CreatableSelect ({ ...rest }) {
   const classes = useStyles()
+  const { className } = rest
+  let customClassName = `${classes.reactSelect}`
 
-  return <ReactCreatableSelect className={classes.reactSelect} {...rest}/>
+  if (className) {
+    customClassName += ` ${className}`
+  }
+
+  return <ReactCreatableSelect {...rest} className={customClassName}/>
 }
 
 export default CreatableSelect

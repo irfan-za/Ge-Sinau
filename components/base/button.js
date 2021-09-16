@@ -51,11 +51,18 @@ const Button = forwardRef((props, ref) => {
     variantClasses = classes.secondary
   }
 
+  let customClassName = ''
+  if (props.className) {
+    customClassName = `${variantClasses} ${props.className}`
+  } else {
+    customClassName = `${variantClasses}`
+  }
+
   return (
     <MuiButton
       {...other}
       ref={ref}
-      className={variantClasses}>
+      className={customClassName}>
       {children}
     </MuiButton>
   )
@@ -69,7 +76,8 @@ Button.displayName = 'Button'
 // ----------------------------------------------------------------------
 Button.propTypes = {
   variant: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
+  className: PropTypes.string
 }
 
 export default Button

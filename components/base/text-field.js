@@ -28,8 +28,14 @@ const useStyles = makeStyles({
 
 export default function TextField ({ ...rest }) {
   const classes = useStyles()
+  const { className } = rest
+  let customClassName = `${classes.textField}`
+
+  if (className) {
+    customClassName += ` ${className}`
+  }
 
   return (
-    <MuiTextField {...rest} className={classes.textField} variant='outlined'/>
+    <MuiTextField {...rest} className={customClassName} variant='outlined'/>
   )
 }

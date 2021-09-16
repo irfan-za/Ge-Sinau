@@ -14,40 +14,6 @@ function useProvideAuth () {
   const [sessionIntervalId, setSessionIntervalId] = useState(null)
 
   /**
-   * Perform update access token using auth data
-   */
-  const performUpdateAccessToken = async () => {
-    try {
-      if (session) {
-        const response = await AuthData.updateAccessToken(session.refreshToken)
-        const newSession = { ...session, accessToken: response.data.accessToken }
-        setSessionCookie(newSession.accessToken, newSession.refreshToken)
-        setSession(newSession)
-      }
-    } catch (error) {
-      logout()
-    }
-  }
-
-  /**
-   * Set new session interval id
-   */
-  const setNewSessionIntervalId = () => {
-    // Update session access token every 15 minutes
-    const interval = setInterval(performUpdateAccessToken, (15 * 60 * 1000))
-    setSessionIntervalId(interval)
-  }
-
-  /**
-   * Clear session interval id
-   */
-  const clearUpdateSessionInterval = () => {
-    if (sessionIntervalId) {
-      clearInterval(sessionIntervalId)
-    }
-  }
-
-  /**
    * Set session cookie to browser
    * @param {string} accessToken
    * @param {string} refreshToken
@@ -105,9 +71,43 @@ function useProvideAuth () {
    * Set session to null
    */
   const logout = () => {
-    setSession(null)
-    clearSessionCookie()
     clearUpdateSessionInterval()
+    clearSessionCookie()
+    setSession(null)
+  }
+
+  /**
+   * Perform update access token using auth data
+   */
+  const performUpdateAccessToken = async () => {
+    try {
+      if (session) {
+        const response = await AuthData.updateAccessToken(session.refreshToken)
+        const newSession = { ...session, accessToken: response.data.accessToken }
+        setSessionCookie(newSession.accessToken, newSession.refreshToken)
+        setSession(newSession)
+      }
+    } catch (error) {
+      logout()
+    }
+  }
+
+  /**
+   * Set new session interval id
+   */
+  const setNewSessionIntervalId = () => {
+    // Update session access token every 15 minutes
+    const interval = setInterval(performUpdateAccessToken, (15 * 60 * 1000))
+    setSessionIntervalId(interval)
+  }
+
+  /**
+   * Clear session interval id
+   */
+  const clearUpdateSessionInterval = () => {
+    if (sessionIntervalId) {
+      clearInterval(sessionIntervalId)
+    }
   }
 
   /**
@@ -117,7 +117,42 @@ function useProvideAuth () {
     const savedSession = getSessionCookie()
     if (savedSession.refreshToken && savedSession.accessToken) {
       setSession(savedSession)
+      performUpdateAccessToken()
     }
+  }
+
+  /**
+   * To get saved session without waiting reload from useEffect restoreSession
+   * @returns
+   */
+  const getSession = () => {
+    const savedSession = getSessionCookie()
+    if (savedSession.refreshToken && savedSession.accessToken) {
+      return savedSession
+    }
+
+    return null
+  }
+
+  /**
+   * Set blocked private page url
+   */
+  const setRejectedFromURL = () => {
+    sessionStorage.setItem('blockedFrom', window.location.pathname + window.location.search)
+  }
+
+  /**
+   * Get blocked private page url
+   */
+  const getRejectedFromURL = () => {
+    return sessionStorage.getItem('blockedFrom')
+  }
+
+  /**
+   * Clear blocked private page url
+   */
+  const clearRejectedFromURL = () => {
+    sessionStorage.removeItem('blockedFrom')
   }
 
   // Restore saved session when first render
@@ -135,6 +170,10 @@ function useProvideAuth () {
   }, [session])
 
   return {
+    setRejectedFromURL,
+    getRejectedFromURL,
+    clearRejectedFromURL,
+    getSession,
     session,
     login,
     logout
