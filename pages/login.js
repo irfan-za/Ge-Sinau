@@ -20,7 +20,7 @@ import { useAuth } from '../auth/auth-provider'
 
 export default function Login () {
   const router = useRouter()
-  const { login, session } = useAuth()
+  const { login, session, getRejectedFromURL, clearRejectedFromURL } = useAuth()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [flashAlertState, setflashAlertState] = useState(FlashAlertState)
@@ -29,8 +29,14 @@ export default function Login () {
    * Redirect to page if user session available
    */
   const redirectToPrivatePage = () => {
+    const blockedFrom = getRejectedFromURL()
     if (session && router) {
-      router.push('/books')
+      if (blockedFrom) {
+        router.push(blockedFrom)
+        clearRejectedFromURL()
+      } else {
+        router.push('/user/books')
+      }
     }
   }
 

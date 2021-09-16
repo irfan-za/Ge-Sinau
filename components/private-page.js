@@ -9,31 +9,46 @@ PrivatePage.propTypes = {
 
 function PrivatePage ({ children }) {
   const router = useRouter()
-  const { session } = useAuth()
+  const { getSession, session, setRejectedFromURL } = useAuth()
+  const [isFirstRender, setIsFirstRender] = useState(true)
   const [isAuthorized, setIsAuthorized] = useState(false)
-
-  /**
-   * Checking user session not null from useAuth
-   */
-  const checkSession = () => {
-    if (session) {
-      setIsAuthorized(true)
-    } else {
-      setIsAuthorized(false)
-    }
-  }
 
   /**
    * If session not exists will redirect to login page
    */
   const redirectToLoginPage = () => {
-    if (!session) {
+    if (!session && router) {
       router.push('/login')
     }
   }
 
-  useEffect(redirectToLoginPage, [router, session])
-  useEffect(checkSession, [session])
+  /**
+   * Check is session available when first render use direct session
+   */
+  const firstRenderSessionCheck = () => {
+    const directSession = getSession()
+
+    if (directSession) {
+      setIsAuthorized(true)
+    } else {
+      setRejectedFromURL()
+    }
+
+    setIsFirstRender(false)
+  }
+
+  /**
+   * Handle useAuth hook session update
+   */
+  const handleSessionUpdate = () => {
+    const isSessionAvailable = session && router
+    if (!isFirstRender && !isSessionAvailable) {
+      redirectToLoginPage()
+    }
+  }
+
+  useEffect(firstRenderSessionCheck, [])
+  useEffect(handleSessionUpdate, [firstRenderSessionCheck, session, router])
 
   // Render private page
   if (isAuthorized) {

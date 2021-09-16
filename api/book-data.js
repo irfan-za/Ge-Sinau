@@ -1,5 +1,6 @@
-import apiResponseBuilder from './api-response-builder'
+import apiResponseBuilder, { XMLHttpRequestResponseBuilder } from './api-response-builder'
 import BookEndpoint from '../constant/book-endpoint'
+import XMLHttpRequest from 'xhr2'
 
 class BookData {
   /**
@@ -27,17 +28,13 @@ class BookData {
    * @param {string} accessToken
    * @returns
    */
-  static async uploadVideo (file, accessToken) {
+  static uploadMedia (file, accessToken) {
+    const xhr = new XMLHttpRequest()
     const formData = new FormData()
     formData.append('data', file)
-    const fetchPromise = fetch(BookEndpoint.uploadVideo.url, {
-      method: BookEndpoint.uploadVideo.method,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      body: formData
-    })
-    return apiResponseBuilder(fetchPromise)
+    xhr.open(BookEndpoint.uploadMedia.method, BookEndpoint.uploadMedia.url)
+    xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+    return XMLHttpRequestResponseBuilder(xhr, formData)
   }
 
   /**
@@ -50,14 +47,14 @@ class BookData {
    * @param {string} book.accessToken
    * @returns {Promise}
    */
-  static async add ({ title, tags, body, video, accessToken }) {
+  static async add ({ title, tags, body, video, thumbnail, accessToken }) {
     const fetchPromise = fetch(BookEndpoint.addBook.url, {
       method: BookEndpoint.addBook.method,
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ title, tags, body, video })
+      body: JSON.stringify({ title, tags, body, video, thumbnail })
     })
     return apiResponseBuilder(fetchPromise)
   }
@@ -70,12 +67,14 @@ class BookData {
    * @param {Array<string>} book.tags
    * @param {string} book.body
    * @param {string} book.video
+   * @param {string} book.accessToken
    * @returns {Promise}
    */
-  static async update ({ id, title, tags, body, video }) {
+  static async update ({ id, title, tags, body, video, accessToken }) {
     const fetchPromise = fetch(BookEndpoint.updateBook.url(id), {
       method: BookEndpoint.updateBook.method,
       headers: {
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ id, title, tags, body, video })
@@ -88,8 +87,11 @@ class BookData {
    * @param {string} id
    * @returns {Promise}
    */
-  static async delete (id) {
+  static async delete (id, accessToken) {
     const fetchPromise = fetch(BookEndpoint.deleteBook.url(id), {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
       method: BookEndpoint.deleteBook.method
     })
     return apiResponseBuilder(fetchPromise)

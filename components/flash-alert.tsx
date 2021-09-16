@@ -35,7 +35,7 @@ export default function FlashAlert (props: FlashAlertProps) {
 
   return (
     <>
-      <Snackbar ref={snackBarRef} open={props.open} autoHideDuration={props.autoHideDuration || 0} onClose={handleClose}>
+      <Snackbar ref={snackBarRef} open={props.open} autoHideDuration={props.autoHideDuration || null} onClose={handleClose}>
         <MuiAlert ref={muiAlertRef} elevation={6} variant="filled" onClose={handleClose} severity={props.status}>
           {props.message}
         </MuiAlert>

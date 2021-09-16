@@ -42,6 +42,6 @@ export function getCookie (cname: string) {
 export function deleteCookie (cname: string) {
   const now = new Date()
   const cvalue = getCookie(cname)
-  now.setMonth(now.getMonth() - 1)
-  document.cookie = `${cname}=${encodeURIComponent(cvalue)};expires=${now.toUTCString()};`
+  now.setTime(now.getTime() - (30 * 24 * 60 * 60 * 1000))
+  document.cookie = `${cname}=${encodeURIComponent(cvalue)};expires=${now.toUTCString()};path=/`
 }

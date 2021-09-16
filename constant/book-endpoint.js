@@ -5,7 +5,7 @@ import ApiBaseURL from './api-base-url'
  * @namespace
  */
 const BookEndpoint = {
-  uploadVideo: {
+  uploadMedia: {
     method: 'POST',
     url: `${ApiBaseURL.origin}/upload/media`
   },

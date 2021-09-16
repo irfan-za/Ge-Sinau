@@ -23,9 +23,14 @@ const useStyles = makeStyles({
 export default function Card (props) {
   const { children, ...other } = props
   const classes = useStyles()
+  let customClassName = `${classes.card}`
+
+  if (props.className) {
+    customClassName += ` ${props.className}`
+  }
 
   return (
-    <MuiCard {...other} className={classes.card}>
+    <MuiCard {...other} className={customClassName}>
       <MuiCardContent>
         { children }
       </MuiCardContent>
@@ -38,5 +43,6 @@ export default function Card (props) {
 // |                To update them edit the d.ts file                   |
 // ----------------------------------------------------------------------
 Card.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  className: PropTypes.string
 }

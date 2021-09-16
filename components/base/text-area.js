@@ -23,8 +23,14 @@ const useStyles = makeStyles({
 
 export default function TextArea ({ ...rest }) {
   const classes = useStyles()
+  const { className } = rest
+  let customClassName = `${classes.textArea}`
+
+  if (className) {
+    customClassName += ` ${className}`
+  }
 
   return (
-    <TextareaAutosize {...rest} className={classes.textArea}/>
+    <TextareaAutosize {...rest} className={customClassName}/>
   )
 }
