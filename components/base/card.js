@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core'
 import MuiCard from '@material-ui/core/Card'
@@ -15,12 +16,7 @@ const useStyles = makeStyles({
   }
 })
 
-/**
- * JSX Card component
- * @param {*} props
- * @returns
- */
-export default function Card (props) {
+const Card = forwardRef((props, ref) => {
   const { children, ...other } = props
   const classes = useStyles()
   let customClassName = `${classes.card}`
@@ -30,13 +26,15 @@ export default function Card (props) {
   }
 
   return (
-    <MuiCard {...other} className={customClassName}>
+    <MuiCard {...other} ref={ref} className={customClassName}>
       <MuiCardContent>
         { children }
       </MuiCardContent>
     </MuiCard>
   )
-}
+})
+
+Card.displayName = 'Card'
 
 // ----------------------------- Warning --------------------------------
 // | These PropTypes are generated from the TypeScript type definitions |
@@ -46,3 +44,5 @@ Card.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string
 }
+
+export default Card

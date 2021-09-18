@@ -17,6 +17,7 @@ import FlashAlert, {
 import AlertDialog, { DialogBoxHandler as dialogHandler } from '../../../components/dialog-box.tsx'
 import BookData from '../../../api/book-data'
 import ApiBaseURL from '../../../constant/api-base-url'
+import { useRouter } from 'next/router'
 import { useAuth } from '../../../auth/auth-provider'
 import { handleInputChange, handleInputFileChange } from '../../../utils/component-handler.ts'
 
@@ -42,8 +43,10 @@ Edit.propTypes = {
 }
 
 export default function Edit (props) {
+  const router = useRouter()
   const { session } = useAuth()
   const bookId = props.id
+  const bookVideoId = props.video
   const [title, setTitle] = useState(props.title)
   const [tags, setTags] = useState(mapToReactSelectValue(props.tags))
   const [description, setDescription] = useState(props.body)
@@ -54,20 +57,8 @@ export default function Edit (props) {
   const [dialogOpen, setDialogOpen] = useState(false)
 
   /**
-   * Clearing all state form to default
-   */
-  const clearForm = () => {
-    setTitle('')
-    setTags([])
-    setDescription('')
-    setVideoUrl('')
-    setVideoFile(null)
-    setFileName('')
-  }
-
-  /**
    * Set new creatable select value
-   * @param {*} value
+   * @param {Array<any>} value
    */
   const handleCreatableSelectChange = (value) => {
     setTags(value)
@@ -90,7 +81,9 @@ export default function Edit (props) {
     try {
       if (isCanDelete) {
         const response = await BookData.delete(bookId, session.accessToken)
-        console.log(response)
+        if (response.status === 'success') {
+          router.push('/user/books') // redirect page
+        }
       }
     } catch (error) {
       FlashAlertHandler.open(error.message, FlashAlertStatus.error, setflashAlertState)
@@ -119,47 +112,39 @@ export default function Edit (props) {
    */
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    const uploadVideo = await BookData.uploadVideo(videoFile, session.accessToken)
-    uploadVideo(
-      /**
-       * Perform add book to api after video uploaded
-       * @param {JSON} response
-       */
-      async (response) => {
-        try {
-          const uploadResponse = response
-          if (uploadResponse.status === 'success') {
-            const videoId = uploadResponse.data.mediaId
-            const bookTags = tags.map(tag => tag.value)
-            const addBookResponse = await BookData.add({
-              title,
-              tags: bookTags,
-              body: description,
-              video: videoId,
-              accessToken: session.accessToken
-            })
+    try {
+      const uploadVideo = BookData.uploadMedia(videoFile, session.accessToken)
+      let uploadVideoResponse = null
+      let videoId = bookVideoId
 
-            if (addBookResponse.status === 'success') {
-              clearForm()
-              FlashAlertHandler.open('Book successfully added !', FlashAlertStatus.success, setflashAlertState)
-            } else {
-              throw new Error('Failed to upload book !')
-            }
-          } else {
-            throw new Error('Video upload failed !')
-          }
-        } catch (error) {
-          handleFormSubmitError(error)
-        }
-      },
-      /**
-       * Update upload video progress precentage
-       * @param {number} progress video upload precentage
-       */
-      (progress) => {
-        // Progress precentage handler
-      },
-      handleFormSubmitError)
+      if (videoFile) {
+        uploadVideoResponse = await uploadVideo.getResponse(percentage => console.log(percentage))
+        videoId = uploadVideoResponse.data.mediaId
+        console.log(videoId)
+        console.log(uploadVideoResponse)
+      }
+
+      const bookTags = tags.map(tag => tag.value)
+      const bookRequestBody = {
+        id: bookId,
+        title,
+        tags: bookTags,
+        body: description,
+        video: videoId,
+        thumbnail: videoId,
+        accessToken: session.accessToken
+      }
+
+      const addBookResponse = await BookData.update(bookRequestBody)
+
+      if (addBookResponse.status === 'success') {
+        FlashAlertHandler.open('Book successfully updated !', FlashAlertStatus.success, setflashAlertState)
+      } else {
+        throw new Error('Failed to upload book !')
+      }
+    } catch (error) {
+      handleFormSubmitError(error)
+    }
   }
 
   useEffect(handleVideoFileChange, [videoFile])

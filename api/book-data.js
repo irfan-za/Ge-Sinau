@@ -70,14 +70,14 @@ class BookData {
    * @param {string} book.accessToken
    * @returns {Promise}
    */
-  static async update ({ id, title, tags, body, video, accessToken }) {
+  static async update ({ id, title, tags, body, video, thumbnail, accessToken }) {
     const fetchPromise = fetch(BookEndpoint.updateBook.url(id), {
       method: BookEndpoint.updateBook.method,
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id, title, tags, body, video })
+      body: JSON.stringify({ title, tags, body, video, thumbnail })
     })
     return apiResponseBuilder(fetchPromise)
   }

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import Head from 'next/head'
 import PrivatePage from '../../../components/private-page'
 import UserNavigation from '../../../components/user-navigation'
 import Card from '../../../components/base/card'
@@ -30,6 +31,9 @@ Books.propTypes = {
 export default function Books ({ books }) {
   return (
     <PrivatePage>
+      <Head>
+        <title>My Books</title>
+      </Head>
       <UserNavigation>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 mb-4">
           {

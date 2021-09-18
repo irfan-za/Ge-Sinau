@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import PrivatePage from '../../../components/private-page'
@@ -22,7 +23,6 @@ import { handleInputChange, handleInputFileChange, refCallback } from '../../../
 
 export default function Add () {
   const { session } = useAuth()
-  const [imageFile, setImageFile] = useState(null)
   const [title, setTitle] = useState('')
   const [tags, setTags] = useState([])
   const [description, setDescription] = useState('')
@@ -35,7 +35,6 @@ export default function Add () {
    * Clearing all state form to default
    */
   const clearForm = () => {
-    setImageFile(null)
     setTitle('')
     setTags([])
     setDescription('')
@@ -51,21 +50,6 @@ export default function Add () {
     if (videoFile) {
       setVideoUrl(createFileObjectURL(videoFile))
     }
-  }
-
-  /**
-   * Set image file state with selected file
-   * @param {File} file
-   */
-  const handleButtonImageChange = (file) => {
-    setImageFile(file)
-  }
-
-  /**
-   * Set image file state to null
-   */
-  const handleButtonImageClose = () => {
-    setImageFile(null)
   }
 
   /**
@@ -99,14 +83,11 @@ export default function Add () {
   const handleFormSubmit = async (event) => {
     event.preventDefault()
     try {
-      const uploadImage = BookData.uploadMedia(imageFile, session.accessToken)
       const uploadVideo = BookData.uploadMedia(videoFile, session.accessToken)
-      const uploadImageResponse = await uploadVideo.getResponse(percentage => console.log(percentage))
-      const uploadVideoResponse = await uploadImage.getResponse()
+      const uploadVideoResponse = await uploadVideo.getResponse(percentage => console.log(percentage))
+      const isSuccess = (uploadVideoResponse.status === 'success')
 
-      const isSuccess = (uploadVideoResponse.status === 'success') && (uploadImageResponse.status === 'success')
       if (isSuccess) {
-        const imageId = uploadImageResponse.data.mediaId
         const videoId = uploadVideoResponse.data.mediaId
         const bookTags = tags.map(tag => tag.value)
         const addBookResponse = await BookData.add({
@@ -114,7 +95,7 @@ export default function Add () {
           tags: bookTags,
           body: description,
           video: videoId,
-          thumbnail: imageId,
+          thumbnail: videoId,
           accessToken: session.accessToken
         })
 
@@ -160,12 +141,12 @@ export default function Add () {
             </div>
             <Card>
               <div className="px-2">
-                <InputGroup label="">
+                {/* <InputGroup label="Thumbnail">
                   <ButtonImage
                     image={imageFile}
                     onChange={handleButtonImageChange}
                     onClose={handleButtonImageClose}/>
-                </InputGroup>
+                </InputGroup> */}
                 <InputGroup label="Title">
                   <TextField
                     required
@@ -209,7 +190,7 @@ export default function Add () {
   )
 }
 
-// eslint-disable-next-line react/prop-types
+// eslint-disable-next-line no-unused-vars
 function ButtonImage ({ image, onChange, onClose, disableClose }) {
   const [refInput, setRefInput] = useState(null)
   const [file, setFile] = useState(null)
