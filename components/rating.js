@@ -18,10 +18,9 @@ HalfRating.propTypes = {
 
 export default function HalfRating ({ ratingValue }) {
   const classes = useStyles()
-
   return (
     <div className={classes.root}>
-      <Rating name="half-rating-read" defaultValue={ratingValue} precision={0.5} readOnly />
+      <Rating name="half-rating-read" value={ratingValue ? parseInt(ratingValue) : 0} precision={0.5} readOnly />
     </div>
   )
 }

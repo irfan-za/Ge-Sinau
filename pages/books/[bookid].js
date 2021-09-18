@@ -1,26 +1,35 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import Rating from '../../components/rating'
+import Button from '../../components/base/button'
+import Textarea from '../../components/base/text-area'
+import MuiTextField from '../../components/base/text-field'
+import { useAuth } from '../../auth/auth-provider'
 
 export default function BookDetail () {
   const [book, setBook] = useState(null)
   const [rating, setRating] = useState(null)
   const [comments, setComments] = useState(null)
+  const [session, setSession] = useState(useAuth())
   const router = useRouter()
   const bookId = router.query.bookid
 
-  useEffect(async () => {
-    const fetchBookDetail = await fetch('http://localhost:2525/books/' + bookId)
-    const bookDetail = await fetchBookDetail.json()
-    setBook(bookDetail.data)
+  useEffect(() => {
+    async function fetchData () {
+      const fetchBookDetail = await fetch('http://localhost:2525/books/' + bookId)
+      const bookDetail = await fetchBookDetail.json()
+      setBook(bookDetail.data)
 
-    const fetchRatings = await fetch('http://localhost:2525/votes?content=' + bookId)
-    const rating = await fetchRatings.json()
-    setRating(rating)
+      const fetchRating = await fetch('http://localhost:2525/votes?content=' + bookId)
+      const rating = await fetchRating.json()
+      setRating(rating)
 
-    const fetchComments = await fetch('http://localhost:2525/books/' + bookId + '/comments')
-    const comments = await fetchComments.json()
-    setComments(comments.data.comments)
+      const fetchComments = await fetch('http://localhost:2525/books/' + bookId + '/comments')
+      const comments = await fetchComments.json()
+      setComments(comments.data.comments)
+    }
+    fetchData()
   }, [bookId])
 
   return (
@@ -51,9 +60,31 @@ export default function BookDetail () {
       <video autoPlay controls className="w-full">
         <source src={`http://localhost:2525/upload/media/${book.book.video}`} type="video/mp4" />
       </video>
-        <div className="px-12 mt-4">
+      <div className="px-12 mt-4">
           <p>{book.book.body}</p>
+      </div>
+      <div className="my-5">
+        {!session
+          ? (
+        <div className="space-y-1 text-center">
+          <p className="text-sm sm:text-base font-medium mb-2">Please login to post a comment!</p>
+          <Link passHref href="/login"><Button>Login</Button></Link>
         </div>
+            )
+          : (
+        <div className="sm:w-96 mt-12">
+          <p className="sm:text-lg font-medium mb-2">Post Comment</p>
+          <form className="flex flex-col items-end space-y-2">
+            <MuiTextField placeholder="username" />
+            <Textarea placeholder="comment"/>
+            <div className="w-24">
+              <Button>Submit</Button>
+            </div>
+          </form>
+        </div>
+            )
+        }
+      </div>
         <div className="w-full mb-20 mt-12">
           <div className="lg:w-4/5 space-y-4">
             {comments && comments.map(comment =>
@@ -73,13 +104,3 @@ export default function BookDetail () {
     </>
   )
 }
-
-// export async function getServerSideProps() {
-//   const res = await fetch("http://localhost:2525/books")
-//   const books= await res.json();
-//   return{
-//     props:{
-//       books
-//     }
-//   }
-// }
